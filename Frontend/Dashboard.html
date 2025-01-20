@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Collab Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dexie/3.0.3/dexie.min.js"></script>
+    <link rel="stylesheet" href="css/dashboard.css">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="favicon/collaboration_8322352.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon/collaboration_8322352.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon/collaboration_8322352.png">
+
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+          <div class="logo">
+            <i class="fas fa-network-wired"></i>
+            <span class="bold-text">COLLAB</span>
+        </div>
+              
+          <nav>
+              <ul>
+                  <li class="active"><i class="fa-brands fa-slack"></i> Project Dashboard</li>
+                  <li><i class="fa-regular fa-message"></i>Chat</li>
+                  <li><i class="fa-regular fa-folder-open"></i> Documents</li>
+                  <li><i class="fa-solid fa-gear"></i>Settings</li>
+                  <li><a href="#" id="logoutLink"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+              </ul>
+          </nav>
+        </aside>
+      
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header>
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="search-bar" placeholder="Search for tasks, files, or members...">
+                </div>
+                <div class="header-actions">
+                    <button class="notification-btn" id="notification-btn">
+                        <i class="fas fa-bell"></i>
+                        <span class="notification-badge" id="notification-badge">0</span>
+                    </button>
+                    <div class="notification-dropdown" id="notification-dropdown" style="display: none;">
+                        <h4>Notifications</h4>
+                        <div id="notification-list"></div>
+                    </div>
+                    <div class="header-actions">
+                        <div class="user-profile">
+                            <div id="profile-initials" class="profile-initials"></div>
+                            <img id="profile-pic" src="" alt="Profile Picture" style="display: none;">
+                            <input type="file" id="upload-pic" style="display: none;" accept="image/*">
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Search Results Container -->
+            <div class="search-results"></div>
+
+        <!-- Kanban Board -->
+            <div class="dashboard">
+                <h1>Project Dashboard</h1>
+                <div id="notification-container"></div>
+
+                <div class="kanban-board">
+                    <div class="column" id="todo-column">
+                        <h2>To Do <span class="task-count">0</span></h2>
+                        <div class="task-list" data-status="todo"></div>
+                        <button class="add-task-btn"><i class="fas fa-plus"></i> Add Task</button>
+                    </div>
+        
+                    <div class="column" id="progress-column">
+                        <h2>In Progress <span class="task-count">0</span></h2>
+                        <div class="task-list" data-status="progress"></div>
+                    </div>
+        
+                    <div class="column" id="done-column">
+                        <h2>Done <span class="task-count">0</span></h2>
+                        <div class="task-list" data-status="done"></div>
+                    </div>
+                </div>
+            </div>
+
+           <!-- Team Chat Section -->
+           <div class="chat-container">
+            <h1 id="activeChannelName"># Team Chat</h1> 
+            <div class="chat-container">
+                <div class="chat-sidebar">
+                    <div class="chat-channels">
+                        <h3>Channels</h3>
+                        <ul id="channelList">
+                            <!-- Default channels -->
+                            <li class="active" data-channel="General"># General</li>
+                            <li data-channel="Development"># Development</li>
+                            <li data-channel="Marketing"># Marketing</li>
+                        </ul>
+                        <div class="create-channel">
+                            <input type="text" id="newChannelName" placeholder="# New channel name">
+                            <button id="createChannelButton">Create</button>
+                        </div>
+                    </div>
+                    <div class="direct-messages">
+                        <h3>Group Messages</h3>
+                        <ul id="user-list"> </ul>                                  
+                    </div>
+                </div>
+                <div class="chat-main">
+                    <!-- Active Channel Name -->
+                    <h2 id="activeChannelDisplay"># General</h2> 
+                    <div class="chat-messages" id="chatMessages"></div>
+                    <div class="chat-input">
+                        <input type="text" placeholder="Type your message..." id="messageInput">
+                        <button id="sendMessage"><i class="fas fa-paper-plane"></i></button>
+                    </div>
+                </div>
+            </div>
+            </div>
+        
+            <!-- Documents Section -->
+            <div class="documents-container">
+              <h1>Documents</h1>
+              <div class="documents-header">
+                  <div class="search-documents">
+                      <input type="text" placeholder="Search documents...">
+                  </div>
+                  <input type="file" id="documentInput" style="display:none;">
+                  <button class="upload-btn" id="uploadButton"><i class="fas fa-upload"></i> Upload</button>
+              </div>
+              <div class="documents-grid" id="documentsGrid"></div>
+            </div>
+
+           <!-- Settings Section -->
+            <div class="settings-section">
+            <h1>Settings</h1>
+            <div class="settings-container">
+                <div class="settings-sidebar">
+                    <ul>
+                        <li class="active">Profile</li>
+                        <li>Notifications</li>
+                        <li>Privacy</li>
+                        <li>Account</li> 
+                        <li>Security</li> 
+                    </ul>
+                </div>
+                <div class="settings-content">
+                    <!-- Profile Settings -->
+                    <div class="profile-settings">
+                        <div class="profile-header">
+                            <img src="https://ui-avatars.com/api/?name=John+Doe" alt="Profile">
+                        </div>
+                        <!-- Personal Information Form -->
+                        <form class="profile-form" id="profileForm">
+                            <h2>Personal Information</h2>
+                            <div class="form-group">
+                              <label>Full Name</label>
+                              <input type="text" id="fullName" placeholder="Full Name">
+                            </div>
+                            <div class="form-group">
+                              <label>Cell Phone Number</label>
+                              <input type="text" id="phoneNumber" placeholder="Phone Number">
+                            </div>
+                            <div class="form-group">
+                              <label>Personal E-mail</label>
+                              <input type="email" id="personalEmail" placeholder="myname@example.com">
+                            </div>
+                          
+                            <h2>Education</h2>
+                            <div class="form-group">
+                              <label>High School</label>
+                              <input type="text" id="highSchool" placeholder="Name of High School Attended">
+                            </div>
+                            <div class="form-group">
+                              <label>College</label>
+                              <input type="text" id="college" placeholder="Name of College/University Attended">
+                            </div>
+                            <div class="form-group">
+                              <label>Area of Study/Degree</label>
+                              <input type="text" id="areaOfStudy" placeholder="Area of Study/Degree">
+                            </div>
+                            <div class="form-group">
+                              <label>Additional details about your education experience (optional)</label>
+                              <textarea id="additionalEducationDetails" placeholder="Additional details about your education experience (optional)"></textarea>
+                            </div>
+                          
+                            <h2>Employment</h2>
+                            <div class="form-group">
+                              <label>Current Employer</label>
+                              <input type="text" id="currentEmployer" placeholder="Name of Current Employer or NONE if not Employed">
+                            </div>
+                            <div class="form-group">
+                              <label>Position</label>
+                              <input type="text" id="currentPosition" placeholder="Position">
+                            </div>
+                            <div class="form-group">
+                              <label>How long did you work here?</label>
+                              <input type="text" id="currentDuration" placeholder="Duration">
+                            </div>
+                            <div class="form-group">
+                              <label>Previous Employer</label>
+                              <input type="text" id="previousEmployer" placeholder="Name of Previous Employer">
+                            </div>
+                            <div class="form-group">
+                              <label>Position</label>
+                              <input type="text" id="previousPosition" placeholder="Position">
+                            </div>
+                            <div class="form-group">
+                              <label>How long did you work here?</label>
+                              <input type="text" id="previousDuration" placeholder="Duration">
+                            </div>
+                            <div class="form-group">
+                              <label>Additional details about your work experience (optional)</label>
+                              <textarea id="additionalWorkExperience" placeholder="Additional details about your work experience (optional)"></textarea>
+                            </div>
+                            <button type="submit" class="save-btn">Save Changes</button>
+                          </form>
+                          
+                    </div>
+
+                    <!-- Notifications Settings -->
+                    <div class="notifications-settings">
+                        <h2>Notifications</h2>
+                        <form class="notifications-form">
+                            <div class="form-group">
+                                <label>Email Notifications</label>
+                                <select>
+                                    <option value="enabled">Enabled</option>
+                                    <option value="disabled">Disabled</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="save-btn">Save Changes</button>
+                        </form>
+                    </div>
+
+                    <!-- Privacy Settings -->
+                    <div class="privacy-settings">
+                        <h2>Privacy</h2>
+                        <form class="privacy-form">
+                            <div class="form-group">
+                                <label>Data Sharing</label>
+                                <select>
+                                    <option value="enabled">Enabled</option>
+                                    <option value="disabled">Disabled</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="save-btn">Save Changes</button>
+                        </form>
+                    </div>
+
+                  
+                    <!-- Account Settings -->
+                    <div class="account-settings">
+                        <h2>Account</h2>
+                        <form class="account-form">
+                            <div class="form-group">
+                                <label>Username</label>
+                                <input type="text" value="johndoe123">
+                            </div>
+                            <div class="form-group">
+                                <label>Password</label>
+                                <input type="password" placeholder="••••••••">
+                            </div>
+                            <button type="submit" class="save-btn">Save Changes</button>
+                        </form>
+                    </div>
+
+                    <!-- Security Settings -->
+                    <div class="security-settings">
+                      <h2>Security</h2>
+                      <br>
+                      <form class="security-form">
+                        <div class="form-group">
+                          <h3>Change Password</h3>
+                          <br>
+                          <input type="password" placeholder="Old Password">
+                        </div>
+                        <div class="form-group">
+                          <label>New Password</label>
+                          <input type="password" placeholder="New Password">
+                        </div>
+                        <div class="form-group">
+                          <label>Confirm Password</label>
+                          <input type="password" placeholder="Confirm Password">
+                        </div>
+                        <button type="submit" class="save-btn">Update</button>
+                        <br><br>
+                        <h3>Delete Account</h3>
+                        <button type="button" class="delete-btn">Delete Account</button>
+                      </form>
+                    </div>
+                    
+                </div>
+            </div>
+          </div>
+
+        </main>
+
+        <!-- Team Panel -->
+        <aside class="team-panel">
+            <h2>Team Members</h2>
+            <div class="team-members">
+                <!-- Team members will be populated here -->
+            </div>
+        
+            <div class="shared-files">
+                <h2>Shared Files</h2>
+                <div id="shared-files-container">
+                    <!-- Shared files will be populated here -->
+                </div>
+            </div>
+        </aside>
+        
+      </div>
+
+    <!-- Add Task Modal -->
+    <div class="modal" id="addTaskModal">
+      <div class="modal-content">
+          <h2>Add New Task</h2>
+          <div class="form-feedback">
+            <span class="success-message" id="success-message"></span>
+        </div>
+          <form id="addTaskForm">
+              <div class="form-group">
+                  <label>Task Title</label>
+                  <input type="text" name="title" id="title">
+                  <span class="error-message" id="title-error"></span>
+              </div>
+              <div class="form-group">
+                  <label>Description</label>
+                  <textarea name="description" id="description"></textarea>
+                  <span class="error-message" id="description-error"></span>
+              </div>
+              <div class="form-group">
+                  <label>Assignee</label>
+                  <select name="assignee" id="assignee">
+                      <option value="">Select team member</option>
+                  </select>
+                  <span class="error-message" id="assignee-error"></span>
+              </div>
+              <div class="form-group">
+                  <label>Due Date</label>
+                  <input type="date" name="due_date" id="dueDate">
+                  <span class="error-message" id="due-date-error"></span>
+              </div>
+              <div class="form-group">
+                  <label>Priority</label>
+                  <select name="priority" id="priority">
+                      <option value="low">Low</option>
+                      <option value="medium">Medium</option>
+                      <option value="high">High</option>
+                  </select>
+                  <span class="error-message" id="priority-error"></span>
+              </div>
+              <div class="modal-actions">
+                  <button type="button" class="cancel-btn">Cancel</button>
+                  <button type="submit" class="submit-btn">Add Task</button>
+              </div>
+          </form>
+          <div class="form-feedback">
+            <span class="error-message" id="form-error"></span>
+        </div>
+      </div>
+  </div>
+  
+
+    <script type="module" src="js/dashboard.js"></script>
+    <script type="module" src="js/settings.js"></script>
+    <script src="js/profile-picture.js"></script>
+    <script src="js/chat.js"></script>
+    <script src="js/task.js"></script>
+    <script src="js/documents.js"></script>
+    <script src="js/settings-form.js"></script>
+</body>
+</html>

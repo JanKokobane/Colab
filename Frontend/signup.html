@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - Collab</title>
+  <link rel="stylesheet" href="css/signup.css">
+  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.js"></script> 
+
+  <link rel="apple-touch-icon" sizes="180x180" href="favicon/collaboration_8322352.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon/collaboration_8322352.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon/collaboration_8322352.png">
+  <link rel="manifest" href="site.webmanifest">
+</head>
+<body>
+  <div class="auth-container">
+    <div class="auth-content">
+      <div class="auth-image">
+        <img src="https://media.licdn.com/dms/image/v2/D5612AQFXsBivSW8_kw/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1695827045738?e=2147483647&v=beta&t=jZTCVxezslJLRzt80gp95ZQaaaYTW7kZKl7Oz2AVyqE"
+             alt="Team Collaboration" 
+             class="collaboration-image">
+        <div class="image-overlay"></div>
+      </div>
+      <div class="auth-card">
+        <div class="auth-header">
+          <h1>Join Collab <i data-lucide="users"></i> </h1>
+          <span class="success-message" id="successMessage"></span>
+        </div>
+        
+        <form id="signupForm" class="auth-form">
+          <div class="form-group">
+              <label for="name">Full Name</label>
+              <input type="text" id="name">
+              <span class="error-message" id="nameError"></span>
+          </div>
+          <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email">
+              <span class="error-message" id="emailError"></span>
+          </div>
+          <div class="form-group">
+              <label for="password">Password</label>
+              <div class="password-container">
+                  <input type="password" id="password">
+                  <i data-lucide="eye" class="toggle-password" onclick="togglePasswordVisibility('password', this)"></i>
+              </div>
+              <span class="error-message" id="passwordError"></span>
+          </div>
+          <div class="form-group">
+              <label for="repeat-password">Repeat Password</label>
+              <div class="password-container">
+                  <input type="password" id="repeat-password">
+                  <i data-lucide="eye" class="toggle-password" onclick="togglePasswordVisibility('repeat-password', this)"></i>
+              </div>
+              <span class="error-message" id="repeatPasswordError"></span>
+          </div>
+          <button type="submit">Create Account</button>
+        </form>
+      
+
+        <p class="auth-footer">
+          Already have an account? <a href="login.html">Sign in</a>
+        </p>
+
+        <div class="social-login">
+          <button id="googleSignIn">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Icon" class="google-icon">
+            Sign Up with Google
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script type="module" src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app.js"></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth.js"></script>
+  <script type="module" src="js/main_signup.js"></script>
+  <script type="module" src="js/validation.js"></script>
+  <script src="js/singup.js"></script>
+  <script>
+    lucide.createIcons(); <!-- Initialize Lucide icons -->
+
+    function togglePasswordVisibility(inputId, icon) {
+      const input = document.getElementById(inputId);
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.setAttribute('data-lucide', 'eye-off');
+      } else {
+        input.type = 'password';
+        icon.setAttribute('data-lucide', 'eye');
+      }
+      lucide.createIcons(); 
+    }
+  </script>
+</body>
+</html>
