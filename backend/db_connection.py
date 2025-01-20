@@ -1,7 +1,7 @@
 import mysql.connector
 import logging
 
-logging.basicConfig(level=logging.INFO)  # Ensure logging is set up properly
+logging.basicConfig(level=logging.INFO) 
 
 def get_db_connection():
     try:
