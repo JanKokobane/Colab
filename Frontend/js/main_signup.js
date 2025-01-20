@@ -5,13 +5,13 @@ import { getAuth, signInWithPopup, GoogleAuthProvider } from "https://www.gstati
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyCojD7DoEYXtQAREfvhqbaygCN1XoHKak0",
-    authDomain: "colab-bd5c9.firebaseapp.com",
-    projectId: "colab-bd5c9",
-    storageBucket: "colab-bd5c9.appspot.com",
-    messagingSenderId: "1070826813260",
-    appId: "1:1070826813260:web:803d8c3a8cbd96f79281e9",
-    measurementId: "G-3VC04DBHNM"
+    apiKey: "#",
+    authDomain: "#",
+    projectId: "#",
+    storageBucket: "#",
+    messagingSenderId: "#",
+    appId: "#",
+    measurementId: "#"
 };
 
 // Initialize Firebase
