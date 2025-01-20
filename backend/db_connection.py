@@ -6,11 +6,11 @@ logging.basicConfig(level=logging.INFO)  # Ensure logging is set up properly
 def get_db_connection():
     try:
         connection = mysql.connector.connect(
-            host='Mojancko01.mysql.pythonanywhere-services.com',  # Your database host
-            user='Mojancko01',                                   # Your PythonAnywhere username
-            password='Mojancko@01',                              # Your database password
-            database='Mojancko01$collab_db',                     # Full database name
-            port=3306                                            # Default MySQL port
+            host='#', 
+            user='#',                                   
+            password='#',                             
+            database='#',                     
+            port=3306                                           
         )
         if connection.is_connected():
             logging.info("Connected to the database successfully.")
